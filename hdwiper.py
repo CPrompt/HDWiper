@@ -72,11 +72,11 @@ def run_smartmon(path):
 # kill the disk
 def shred_disk(path):
         print("Running shred...")
-		kill_disk = subprocess.Popen(
-				['shred','-vfz',path],
-				stdout=subprocess.PIPE,stderr=subprocess.PIPE)
-		output,err = kill_disk.communicate()
-		kill_return = kill_disk.returncode
+	kill_disk = subprocess.Popen(
+			['shred','-vfz',path],
+			stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+	output,err = kill_disk.communicate()
+	kill_return = kill_disk.returncode
 
 
 
