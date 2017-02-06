@@ -99,7 +99,7 @@ def ask_confirmation(question,default="yes"):
              elif choice in valid:
                      return valid[choice]
              else:
-					sys.stdout.write("Please respond with yes, no, y or n")
+	          sys.stdout.write("Please respond with yes, no, y or n")
 
 if __name__ == "__main__":
         if(ask_confirmation("You are about to wipe out '%s'.  Are you sure?  This will wipe out all data!" % path)):
