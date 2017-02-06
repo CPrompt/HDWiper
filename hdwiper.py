@@ -1,30 +1,12 @@
 #!/usr/bin/python
 
 '''
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
-
-'''
 Summary:
     Script will -
         ask user for the point of the drive (i.e. /dev/sda)
         run smartmontools
         output the report to it's own folder (datestamp folder?)
         then run shred on the drive
-		
-	WARNING!  This will destroy the harddrive you pass to it!
-	Pass the wrong path and you are in trouble.
 '''
 import argparse
 import stat
@@ -40,7 +22,7 @@ args = parser.parse_args()
 path = args.d
 
 myTime = strftime("%Y-%m-%d-%H%M%S")
-log_output = "hd_log" + "_" + myTime
+log_output = raw_input("Give the log file a name:  ")
 
 # check if disk is really there...
 def check_disk(path):
@@ -72,11 +54,9 @@ def run_smartmon(path):
 # kill the disk
 def shred_disk(path):
         print("Running shred...")
-	kill_disk = subprocess.Popen(
-			['shred','-vfz',path],
-			stdout=subprocess.PIPE,stderr=subprocess.PIPE)
-	output,err = kill_disk.communicate()
-	kill_return = kill_disk.returncode
+        kill_disk = subprocess.Popen(['shred','-vfz','-n 1',path],)
+        output,err = kill_disk.communicate()
+        kill_return = kill_disk.returncode
 
 
 
@@ -99,13 +79,13 @@ def ask_confirmation(question,default="yes"):
              elif choice in valid:
                      return valid[choice]
              else:
-	          sys.stdout.write("Please respond with yes, no, y or n")
+                     sys.stdout.write("Please respond with yes, no, y or n")
 
 if __name__ == "__main__":
         if(ask_confirmation("You are about to wipe out '%s'.  Are you sure?  This will wipe out all data!" % path)):
-                check_disk(path)
-                run_smartmon(path)
-                shred_disk(path)
+	        check_disk(path)
+	        run_smartmon(path)
+	        shred_disk(path)
         else:
                 print("Mission aborted!")
                 sys.exit(1)
