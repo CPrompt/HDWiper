@@ -67,7 +67,7 @@ def ask_confirmation(question,default="yes"):
         elif default == "yes":
                 prompt = " [Y/N]"
         elif default == "no":
-                prompt = " [y/N"
+                prompt = " [y/N]"
         else:
              raise ValueError("Invalid answer!")
 
