@@ -83,10 +83,10 @@ def ask_confirmation(question,default="yes"):
 
 if __name__ == "__main__":
         if(ask_confirmation("You are about to wipe out '%s'.  Are you sure?  This will wipe out all data!" % path)):
-	        check_disk(path)
-	        run_smartmon(path)
-	        shred_disk(path)
+            check_disk(path)
+            run_smartmon(path)
+            shred_disk(path)
         else:
-                print("Mission aborted!")
-                sys.exit(1)
+            print("Mission aborted!")
+            sys.exit(1)
 
