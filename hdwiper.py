@@ -13,6 +13,8 @@ import stat
 import os
 import subprocess
 import sys
+import smtplib
+
 from time import strftime
 
 parser = argparse.ArgumentParser()
@@ -21,8 +23,13 @@ args = parser.parse_args()
 
 path = args.d
 
+script_path = os.path.dirname(os.path.abspath(__file__))
 myTime = strftime("%Y-%m-%d-%H%M%S")
 log_output = raw_input("Give the log file a name:  ")
+
+email_log_subject = "HDWiper complete: %s" % log_output
+email_server = "localhost"
+email_for_logs = "ENTER NAME HERE"
 
 # check if disk is really there...
 def check_disk(path):
@@ -44,7 +51,7 @@ def run_smartmon(path):
         output,err = smart_result.communicate()
         rc = smart_result.returncode
         log = (output)
-        f = open(log_output,'w')
+        f = open(script_path + "/" + log_output,'w')
         f.write(log)
         f.close()
     except:
@@ -81,11 +88,19 @@ def ask_confirmation(question,default="yes"):
              else:
                      sys.stdout.write("Please respond with yes, no, y or n")
 
+def email_log_files(log_text):
+    log_text = bytes.decode(log_text)
+    msg = "Subject: %s\n%s"% (email_log_subject,log_text)
+    s = sendmail.SMTP(email_server)
+    s.sendmail(email_for_logs,email_for_logs,msg)
+    s.quit()
+
 if __name__ == "__main__":
         if(ask_confirmation("You are about to wipe out '%s'.  Are you sure?  This will wipe out all data!" % path)):
             check_disk(path)
             run_smartmon(path)
             shred_disk(path)
+            email_log_files("HDWiper has finished with %s" % log_output)
         else:
             print("Mission aborted!")
             sys.exit(1)
