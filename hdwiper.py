@@ -91,7 +91,7 @@ def ask_confirmation(question,default="yes"):
 def email_log_files(log_text):
     log_text = bytes.decode(log_text)
     msg = "Subject: %s\n%s"% (email_log_subject,log_text)
-    s = sendmail.SMTP(email_server)
+    s = smtplib.SMTP(email_server)
     s.sendmail(email_for_logs,email_for_logs,msg)
     s.quit()
 
