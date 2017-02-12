@@ -30,6 +30,7 @@ log_output = raw_input("Give the log file a name:  ")
 email_log_subject = "HDWiper complete: %s" % log_output
 email_server = "localhost"
 email_for_logs = "ENTER NAME HERE"
+email_port = "25"
 
 # check if disk is really there...
 def check_disk(path):
@@ -91,7 +92,7 @@ def ask_confirmation(question,default="yes"):
 def email_log_files(log_text):
     log_text = bytes.decode(log_text)
     msg = "Subject: %s\n%s"% (email_log_subject,log_text)
-    s = smtplib.SMTP(email_server)
+    s = smtplib.SMTP(email_server,email_port)
     s.sendmail(email_for_logs,email_for_logs,msg)
     s.quit()
 
